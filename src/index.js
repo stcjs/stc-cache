@@ -17,7 +17,7 @@ export default class Cache {
   constructor(options = {
     path: '',
     type: 'default',
-    handle: JSON
+    handle: null
   }){
     if(typeof options === 'string'){
       options = {type: options};
@@ -25,6 +25,7 @@ export default class Cache {
     this.options = options;
     this.path = this.getStorePath();
     this.cache = {};
+    this.handle = options.handle || JSON;
   }
   /**
    * get store path
