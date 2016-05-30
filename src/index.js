@@ -16,7 +16,8 @@ export default class Cache {
    */
   constructor(options = {
     path: '',
-    type: 'default'
+    type: 'default',
+    handle: JSON
   }){
     if(typeof options === 'string'){
       options = {type: options};
@@ -60,6 +61,10 @@ export default class Cache {
     }
     let fn = promisify(fs.readFile, fs);
     return fn(filePath, encoding).then(data => {
+      if(!data){
+        return;
+      }
+      data = this.handle.parse(data);
       this.cache[name] = data;
       return data;
     }).catch(() => {
@@ -76,6 +81,7 @@ export default class Cache {
     }
     let filePath = path.join(this.path, name);
     let fn = promisify(fs.writeFile, fs);
+    value = this.handle.stringify(value);
     return fn(filePath, value).catch(() => {
       console.log('set cache error: ', name);
     });
