@@ -18,6 +18,7 @@ export default class Cache {
   constructor(options = {
     path: '',
     type: 'default',
+    onlyMemory: false,
     handle: null,
     logger: null
   }){
@@ -29,6 +30,7 @@ export default class Cache {
     this.cache = {};
     this.handle = options.handle || JSON;
     this.logger = options.logger || noop;
+    this.onlyMemory = options.onlyMemory || false;
   }
   /**
    * get store path
@@ -66,7 +68,7 @@ export default class Cache {
    * get cache
    */
   get(name, encoding = 'utf8'){
-    if(this.cache[name]){
+    if(this.cache[name] || this.onlyMemory){
       return Promise.resolve(this.cache[name]);
     }
     let filePath = this.getSavedFilePath(name);
@@ -90,6 +92,9 @@ export default class Cache {
    */
   set(name, value){
     this.cache[name] = value;
+    if(this.onlyMemory){
+      return;
+    }
     let filePath = this.getSavedFilePath(name);
     if(!filePath){
       return;
