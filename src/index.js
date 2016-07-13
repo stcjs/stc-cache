@@ -1,4 +1,4 @@
-import {mkdir, isFile, promisify, md5} from 'stc-helper';
+import {mkdir, isFile, promisify} from 'stc-helper';
 import os from 'os';
 import path from 'path';
 import fs from 'fs';
@@ -67,7 +67,6 @@ export default class Cache {
    * get cache
    */
   get(name, encoding = 'utf8'){
-    name = md5(name);
     if(this.cache[name] || this.onlyMemory){
       return Promise.resolve(this.cache[name]);
     }
@@ -91,7 +90,6 @@ export default class Cache {
    * set cache
    */
   set(name, value){
-    name = md5(name);
     this.cache[name] = value;
     if(this.onlyMemory){
       return;
