@@ -58,8 +58,7 @@ export default class Cache {
     if(!this.path){
       return;
     }
-    let key = md5(name);
-    let savePath = `${key[0]}/${key[1]}/${key}.json`;
+    let savePath = `${name[0]}/${name[1]}/${name}.json`;
     let p = path.join(this.path, savePath);
     mkdir(path.dirname(p));
     return p;
@@ -68,6 +67,7 @@ export default class Cache {
    * get cache
    */
   get(name, encoding = 'utf8'){
+    name = md5(name);
     if(this.cache[name] || this.onlyMemory){
       return Promise.resolve(this.cache[name]);
     }
@@ -91,6 +91,7 @@ export default class Cache {
    * set cache
    */
   set(name, value){
+    name = md5(name);
     this.cache[name] = value;
     if(this.onlyMemory){
       return;
