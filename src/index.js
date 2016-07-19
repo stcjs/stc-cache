@@ -67,7 +67,7 @@ export default class Cache {
    * get cache
    */
   get(name, encoding = 'utf8'){
-    if(this.cache[name] || this.onlyMemory){
+    if(this.cache[name] !== undefined || this.onlyMemory){
       return Promise.resolve(this.cache[name]);
     }
     let filePath = this.getSavedFilePath(name);
