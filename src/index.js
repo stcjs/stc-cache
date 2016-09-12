@@ -1,11 +1,7 @@
 import {mkdir, isFile, promisify} from 'stc-helper';
-import os from 'os';
 import path from 'path';
 import fs from 'fs';
 
-//home path
-const homePath = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'];
-const tmpPath = os.tmpdir();
 const noop = () => {};
 
 /**
@@ -36,20 +32,15 @@ export default class Cache {
    * get store path
    */
   getStorePath(){
-    let p = '.stc/' + this.options.type;
-    let list = [
-      path.join(homePath, p),
-      path.join(tmpPath, p)
-    ];
-    if(this.options.path){
-      list.unshift(path.join(this.options.path, p));
+    if(!this.options.path){
+      throw new Error('cache path must be set');
     }
-    for(let i = 0, length = list.length; i < length; i++){
-      let item = list[i];
-      if(mkdir(item)){
-        return item;
-      }
+    let p = this.options.path + '/' + this.options.type;
+    let flag = mkdir(p);
+    if(!flag){
+      throw new Error(`mkdir ${p} fail`);
     }
+    return p;
   }
   /**
    * get saved file path
