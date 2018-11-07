@@ -36,10 +36,7 @@ export default class Cache {
       throw new Error('cache path must be set');
     }
     let p = this.options.path + '/' + this.options.type;
-    let flag = mkdir(p);
-    if(!flag){
-      throw new Error(`mkdir ${p} fail`);
-    }
+    mkdir(p);
     return p;
   }
   /**
